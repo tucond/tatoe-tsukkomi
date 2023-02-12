@@ -1,0 +1,57 @@
+openapi: '3.0.2'
+info:
+  title: Tatoe Tsukkomi Generator
+  description: API for Tatoe Tsukkomi Generator
+  version: '1.0'
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/mit-license.php
+servers:
+  - url: http://localhost:8080
+paths:
+  /tsukkomi:
+    get:
+      description: get Tsukkomi
+      operationId: getTsukkomi
+      parameters:
+        - name: tsukkomi
+          in: query
+          description: a word for tsukkomi
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tsukkomi response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tsukkomi'
+                  
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Tsukkomi:
+      type: object
+      properties:
+        tsukkomi:
+          type: string
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+        message:
+          type: string
+          description: Error message
+
+
