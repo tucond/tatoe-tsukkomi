@@ -1,47 +1,52 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"os"
+	"net/http"
 
-	"github.com/PullRequestInc/go-gpt3"
-	"github.com/joho/godotenv"
+	oapi "tatoe-tsukkomi/api/generated"
+
+	oapiMiddleware "github.com/deepmap/oapi-codegen/pkg/middleware"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
-func main() {
-	godotenv.Load()
+type apiController struct{}
 
-	apiKey := os.Getenv("API_KEY")
-	if apiKey == "" {
-		log.Fatalln("Missing API KEY")
-	}
+// レスポンス
+type TsukkomiResponse struct {
+	Tsukkomi *string `json:"tsukkomi"`
+}
 
-	ctx := context.Background()
-	client := gpt3.NewClient(apiKey)
-	defaultPrompt :=
-		`
-暑い=砂漠か！
-暗い=田舎道か！
-ケチ=給料日前か！
-汚い=公園の端に落ちてるやつか！
-長い=万里の長城か！
-少食=歯医者の帰りか！
-`
-
-	appendPrompt := "かわいい"
-	wholePrompt := defaultPrompt + appendPrompt + "="
-
-	resp, err := client.CompletionWithEngine(ctx, gpt3.TextDavinci003Engine, gpt3.CompletionRequest{
-		// Prompt:    []string{"The first thing you should know about javascript is"},
-		Prompt:    []string{wholePrompt},
-		MaxTokens: gpt3.IntPtr(30),
-		Stop:      []string{"."},
-		Echo:      true,
+// OpenAPI で定義された (GET /tsukkomi) の実装
+func (apiController) GetTsukkomi(ctx echo.Context, params oapi.GetTsukkomiParams) error {
+	// OpenApi で生成された Tsukkomi モデルを使ってレスポンスを返す
+	return ctx.JSON(http.StatusOK, TsukkomiResponse{
+		Tsukkomi: getGptResponse(*params.Tsukkomi),
 	})
+}
+
+func main() {
+
+	// Echo のインスタンス作成
+	e := echo.New()
+
+	// OpenApi 仕様に沿ったリクエストかバリデーションをするミドルウェアを設定
+	swagger, err := oapi.GetSwagger()
 	if err != nil {
-		log.Fatalln(err)
+		panic(err)
 	}
-	fmt.Println(resp.Choices[0].Text)
+	e.Use(oapiMiddleware.OapiRequestValidator(swagger))
+	// ロガーのミドルウェアを設定
+	e.Use(middleware.Logger())
+	// APIがエラーで落ちてもリカバーするミドルウェアを設定
+	e.Use(middleware.Recover())
+
+	// OpenAPI の仕様を満たす構造体をハンドラーとして登録する
+	api := apiController{}
+	oapi.RegisterHandlers(e, api)
+
+	// 8080ポートで Echo サーバ起動
+	e.Logger.Fatal(e.Start(":8080"))
+
 }
