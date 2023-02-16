@@ -16,14 +16,14 @@ type apiController struct{}
 
 // レスポンス
 type TsukkomiResponse struct {
-	Tsukkomi *string `json:"tsukkomi"`
+	Tatoe *string `json:"tsukkomi"`
 }
 
 // OpenAPI で定義された (GET /tsukkomi) の実装
 func (apiController) GetTsukkomi(ctx echo.Context, params oapi.GetTsukkomiParams) error {
 	// OpenApi で生成された Tsukkomi モデルを使ってレスポンスを返す
 	return ctx.JSON(http.StatusOK, TsukkomiResponse{
-		Tsukkomi: getGptResponse(*params.Tsukkomi),
+		Tatoe: getGptResponse(*params.Word),
 	})
 }
 

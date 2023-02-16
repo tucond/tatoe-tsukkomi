@@ -37,8 +37,8 @@ type Tsukkomi struct {
 
 // GetTsukkomiParams defines parameters for GetTsukkomi.
 type GetTsukkomiParams struct {
-	// Tsukkomi a word for tsukkomi
-	Tsukkomi *string `form:"tsukkomi,omitempty" json:"tsukkomi,omitempty"`
+	// Word a word for tsukkomi
+	Word *string `form:"word,omitempty" json:"word,omitempty"`
 }
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
@@ -151,9 +151,9 @@ func NewGetTsukkomiRequest(server string, params *GetTsukkomiParams) (*http.Requ
 
 	queryValues := queryURL.Query()
 
-	if params.Tsukkomi != nil {
+	if params.Word != nil {
 
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "tsukkomi", runtime.ParamLocationQuery, *params.Tsukkomi); err != nil {
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "word", runtime.ParamLocationQuery, *params.Word); err != nil {
 			return nil, err
 		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
 			return nil, err
@@ -307,11 +307,11 @@ func (w *ServerInterfaceWrapper) GetTsukkomi(ctx echo.Context) error {
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetTsukkomiParams
-	// ------------- Optional query parameter "tsukkomi" -------------
+	// ------------- Optional query parameter "word" -------------
 
-	err = runtime.BindQueryParameter("form", true, false, "tsukkomi", ctx.QueryParams(), &params.Tsukkomi)
+	err = runtime.BindQueryParameter("form", true, false, "word", ctx.QueryParams(), &params.Word)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter tsukkomi: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter word: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
@@ -354,14 +354,14 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/6xTsW7cMAz9FYPt6FrXZNPWoQhuKNDhtiCDKtM+JbaoUHTb4KB/LyTbF7dOO3WypEc+",
-	"Pj7SF7A0BvLoJYK+QLRnHE05fmYmzofAFJDFYXm21GL+thgtuyCOPOg5uCpYDR3xaAQ0OC+3N1CDvASc",
-	"r9gjQ6phxBhN/1eiFb6mRmHne0ipBsbnyTG2oO9hKbiGP6QaTnF6eqLR7ZXLBtnTLi/07RGtQMpPzne0",
-	"V/jp67HqiKuTEcJqLVfdoUc2Qgw1DM6ij6U7b8ZM++V4ghomHkDDWSRErRQF9JEmttgQ92pJimp08mG5",
-	"NOEcsl3iZMg0/6j5HTnOAj82h5yT6U1woOG2OTR5DMHIuTihtlb0KPsme5RrGShcbDJ0bEHDHcoGC4bN",
-	"iIIcQd//yWOqH8Rt8UteU1yGnifkF6hXhzbwvIRvjekhjz8Gyj5l/OZwmHfSC/rShglhcLZoVY8xa7hs",
-	"+N4zdqDhnXrderWsvLq2VGb/extXx9fqUEI6Mw3y3wTMP9wb1SePPwNawbbCNSal9CsAAP//KRwn/LwD",
-	"AAA=",
+	"H4sIAAAAAAAC/6xTsW7cMAz9FYPtqFrXZNPWoQhuKNDhtiCDKtM+JbaoUHTb4KB/LyTbl2sv7dTJkh75",
+	"HvlIn8DRFClgkATmBMkdcbL1+JmZuBwiU0QWj/XZUYfl22Fy7KN4CmCW4KZiCnriyQoY8EFub0CBvERc",
+	"rjggQ1YwYUp2+CvRBp9Tk7APA+SsgPF59owdmHtYBbfwh6zgkOanJ5r8deVygVzTri/07RGdQC5PPvR0",
+	"XeGnr/umJ24OVgibTa65w4BshRgUjN5hSLW7YKdC+2V/AAUzj2DgKBKT0ZoihkQzO2yJB70mJT15+bBe",
+	"2niMxS7xMhaaf2h+R05LgR/bXckp9DZ6MHDb7toyhmjlWJ3Ql1YMKNdNDihnGahcbAu078DAHcoFFi3b",
+	"CQU5gbn/k8c2P4i76pe8pvgCPc/IL6A2h0ocqHUB3xrRQxl9ilQ8KvjNbrfsYxAMtQUb4+hdrVM/pqJ/",
+	"uuB7z9iDgXf6deP1uu763E6d++8tnN3e1KGG9HYe5b8VsPxsb6jPAX9GdIJdg1tMzvlXAAAA//9G89rL",
+	"uAMAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

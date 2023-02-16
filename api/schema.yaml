@@ -12,7 +12,7 @@ paths:
       description: get Tsukkomi
       operationId: getTsukkomi
       parameters:
-        - name: tsukkomi
+        - name: word
           in: query
           description: a word for tsukkomi
           required: false
