@@ -20,7 +20,7 @@ func getGptResponse(inputString string) *string {
 
 	godotenv.Load()
 
-	apiKey := os.Getenv("API_KEY")
+	apiKey := os.Getenv("GPT_API_KEY")
 	if apiKey == "" {
 		log.Fatalln("Missing API KEY")
 	}

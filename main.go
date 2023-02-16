@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	oapi "tatoe-tsukkomi/api/generated"
 
@@ -46,7 +47,13 @@ func main() {
 	api := apiController{}
 	oapi.RegisterHandlers(e, api)
 
+	// Cloud Run用設定
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	// 8080ポートで Echo サーバ起動
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + port))
 
 }

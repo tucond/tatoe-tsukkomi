@@ -6,8 +6,6 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/mit-license.php
-servers:
-  - url: http://localhost:8080
 paths:
   /tsukkomi:
     get:
