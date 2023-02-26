@@ -40,6 +40,14 @@ func main() {
 	e.Use(oapiMiddleware.OapiRequestValidator(swagger))
 	// ロガーのミドルウェアを設定
 	e.Use(middleware.Logger())
+
+	// CORS設定
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAcceptEncoding},
+		AllowMethods: []string{http.MethodGet},
+	}))
+
 	// APIがエラーで落ちてもリカバーするミドルウェアを設定
 	e.Use(middleware.Recover())
 
