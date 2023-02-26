@@ -34,13 +34,21 @@ func getGptResponse(inputString string) *string {
 	ctx := context.Background()
 	client := gpt3.NewClient(apiKey)
 	defaultPrompt :=
+		// `
+		// 暑い=砂漠か！
+		// 暗い=田舎道か！
+		// ケチ=給料日前か！
+		// 汚い=公園の端に落ちてるやつか！
+		// 長い=万里の長城か！
+		// 少食=歯医者の帰りか！
+		// `
 		`
-		暑い=砂漠か！
-		暗い=田舎道か！
-		ケチ=給料日前か！
 		汚い=公園の端に落ちてるやつか！
 		長い=万里の長城か！
+		辛い=麻婆豆腐タバスコカレーか！
 		少食=歯医者の帰りか！
+		甘い=玉置浩二の歌声か！
+		短い=ライブチャットの無料時間か！
 		`
 
 	Prompt := defaultPrompt + inputString + "="
